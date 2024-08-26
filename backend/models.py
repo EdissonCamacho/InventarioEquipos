@@ -44,6 +44,7 @@ class Equipo(Base):
     estadoOperatividad = Column(String(100))
     sistemaOperativo = Column(String(100))
     caracteristivas = Column(String(500))
+    urlImagen=Column(String(100))
     
     # Llaves foráneas
     idTipoEquipo = Column(Integer, ForeignKey("tipoEquipo.idTipoEquipo"))

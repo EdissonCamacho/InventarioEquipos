@@ -56,6 +56,8 @@ class EquipoOut(BaseModel):
     caracteristivas: str
     tipo_equipo: TipoEquipoOut
     responsable: ResponsableOut
+    urlImagen:str
+    
 
     class Config:
         orm_mode = True
@@ -135,3 +137,16 @@ def read_equipo_sede(equipo_sede_id: int, db: Session = Depends(get_db)):
 @app.get("/equipoSede/", response_model=List[EquipoSedeOut])
 def read_equipo_sedes(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return db.query(EquipoSede).options(joinedload(EquipoSede.equipo).joinedload(Equipo.tipo_equipo), joinedload(EquipoSede.equipo).joinedload(Equipo.responsable), joinedload(EquipoSede.sede)).offset(skip).limit(limit).all()
+
+
+@app.get("/sede/{sede_id}/equipos", response_model=List[EquipoOut])
+def read_equipos_by_sede(sede_id: int, db: Session = Depends(get_db)):
+    db_equipos = db.query(Equipo).join(EquipoSede).filter(EquipoSede.idSede == sede_id).options(
+        joinedload(Equipo.tipo_equipo),
+        joinedload(Equipo.responsable)
+    ).all()
+    
+    if not db_equipos:
+        raise HTTPException(status_code=404, detail="No se encontraron equipos para esta sede")
+    
+    return db_equipos

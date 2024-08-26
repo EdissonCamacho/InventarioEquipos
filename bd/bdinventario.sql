@@ -29,6 +29,7 @@ sistemaOperativo varchar(100),
 idTipoEquipo int ,
 caracteristivas varchar(500),
 idResponsable int,
+urlImagen varchar(255),
 foreign key (idTipoEquipo) references tipoEquipo (idTipoEquipo),
 foreign key(idResponsable) references responsable (idResponsable),
 primary key (idEquipo));
