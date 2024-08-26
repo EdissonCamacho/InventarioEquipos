@@ -56,8 +56,6 @@ class EquipoOut(BaseModel):
     caracteristivas: str
     tipo_equipo: TipoEquipoOut
     responsable: ResponsableOut
-    urlImagen:str
-    
 
     class Config:
         orm_mode = True
