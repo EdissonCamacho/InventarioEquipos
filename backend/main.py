@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Puedes restringir esto a dominios específicos
+    allow_origins=["*"],  # Permitir todos los orígenes
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,6 +56,7 @@ class EquipoOut(BaseModel):
     caracteristivas: str
     tipo_equipo: TipoEquipoOut
     responsable: ResponsableOut
+    urlImagen:str
 
     class Config:
         orm_mode = True
@@ -146,5 +147,20 @@ def read_equipos_by_sede(sede_id: int, db: Session = Depends(get_db)):
     
     if not db_equipos:
         raise HTTPException(status_code=404, detail="No se encontraron equipos para esta sede")
+    
+    return db_equipos
+
+@app.get("/equipoSede/{sede_id}/ubicacion/{ubicacion}", response_model=List[EquipoOut])
+def read_equipos_by_sede_and_ubicacion(sede_id: int, ubicacion: str, db: Session = Depends(get_db)):
+    db_equipos = db.query(Equipo).join(EquipoSede).filter(
+        EquipoSede.idSede == sede_id,
+        EquipoSede.ubicacion == ubicacion
+    ).options(
+        joinedload(Equipo.tipo_equipo),  # Carga anticipada del tipo de equipo
+        joinedload(Equipo.responsable)   # Carga anticipada del responsable
+    ).all()
+    
+    if not db_equipos:
+        raise HTTPException(status_code=404, detail="No se encontraron equipos en la ubicación especificada para esta sede")
     
     return db_equipos

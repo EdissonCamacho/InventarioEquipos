@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, RouterLinkActive, ActivatedRoute } from '@angular/router';
 import { ServiceEquiposSedeService } from '../service-equipos-sede.service';
 
 @Component({
   selector: 'app-vista-sede',
   standalone: true,
-  imports: [ReactiveFormsModule,RouterOutlet,RouterLink,RouterLinkActive],
+  imports: [ReactiveFormsModule,RouterOutlet,RouterLink,RouterLinkActive,FormsModule],
   templateUrl: './vista-sede.component.html',
   styleUrl: './vista-sede.component.css'
 })
@@ -14,6 +14,7 @@ export class VistaSedeComponent {
 
   idSede:any;
   equipo:any;
+  ubicacion:any
   ngOnInit(): void {
     this.obtenerSede();
     this.obtenerEquipos();
@@ -45,6 +46,19 @@ export class VistaSedeComponent {
 
  }
 
+ buscarEquipos(){
+
+  this.serviceEquipos.getPorSedeUbicacion(this.idSede,this.ubicacion).subscribe((
+    data:any)=>{
+    console.log(data);  
+    this.equipo = data;
+  }, (error:any) =>{ 
+    console.log(error);
+     })
+
+  
+
+ }
  
 
 

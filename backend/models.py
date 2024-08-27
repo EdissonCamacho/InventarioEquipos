@@ -66,3 +66,7 @@ class EquipoSede(Base):
     # Relaciones
     equipo = relationship("Equipo", back_populates="equipos_sede")
     sede = relationship("Sede", back_populates="equipos")
+
+
+
+

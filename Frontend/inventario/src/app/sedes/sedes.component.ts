@@ -30,7 +30,7 @@ export class SedesComponent {
     console.log(data);
     this.sedes = data;
   }, (error:any) =>{ 
-    console.log('El error es: '+error);
+    console.log(error);
      }
   
 ) 
