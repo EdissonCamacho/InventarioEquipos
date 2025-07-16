@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, Column, ForeignKey
+from sqlalchemy import String, Integer, Column, ForeignKey, Date # Importa Date para el campo fecha
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -54,6 +54,9 @@ class Equipo(Base):
     tipo_equipo = relationship("TipoEquipo", back_populates="equipos")
     responsable = relationship("Responsable", back_populates="equipos")
     equipos_sede = relationship("EquipoSede", back_populates="equipo")
+    # Nueva relación para ActividadRealizada
+    actividades_realizadas = relationship("ActividadRealizada", back_populates="equipo_rel")
+
 
 class EquipoSede(Base):
     __tablename__ = "equipoSede"
@@ -67,6 +70,28 @@ class EquipoSede(Base):
     equipo = relationship("Equipo", back_populates="equipos_sede")
     sede = relationship("Sede", back_populates="equipos")
 
+
+
+## Nuevo Modelo: ActividadRealizada
+
+
+class ActividadRealizada(Base):
+    __tablename__ = "actividadRealizada"
+    
+    idActividadRealizada = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    
+    # Llave foránea que referencia a la tabla 'equipo'
+    idEquipo = Column(Integer, ForeignKey("equipo.idEquipo"))
+    
+    fecha = Column(Date) # Usa Date para almacenar solo la fecha
+    observacion = Column(String(255))
+    tipoMantenimiento = Column(String(255))
+    tecnico = Column(String(255))
+    
+    # Relación con el modelo Equipo
+    # 'equipo_rel' es el nombre que usarás para acceder al objeto Equipo desde ActividadRealizada
+    # 'actividades_realizadas' es el back_populates que se define en el modelo Equipo
+    equipo_rel = relationship("Equipo", back_populates="actividades_realizadas")
 
 
 

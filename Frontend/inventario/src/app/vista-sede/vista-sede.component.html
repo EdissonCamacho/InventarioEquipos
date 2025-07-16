@@ -37,7 +37,16 @@
 
                     <p class="leading-relaxed text-base">{{item.caracteristivas}}</p>
                     <p class="leading-relaxed text-base">Responsable: {{item.responsable.nombreCompleto}}</p>
+                    <p class="leading-relaxed text-base">Estado Operatividad: {{item.estadoOperatividad}}</p>
                     
+                    <a [routerLink]="['/actividad',item.idEquipo]" >
+                    <a class="text-indigo-500 inline-flex items-center">Ver Actividades </a>
+                    
+                </a>
+
+
+
+
                 </div>
             </div>
 

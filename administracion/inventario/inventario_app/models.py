@@ -49,13 +49,13 @@ class Equipo(models.Model):
         TipoEquipo, 
         on_delete=models.CASCADE, 
         related_name="equipos",
-        db_column='idTipoEquipo'  # Usa el nombre de columna exacto
+        db_column='idTipoEquipo'
     )
     idResponsable = models.ForeignKey(
         Responsable, 
         on_delete=models.CASCADE, 
         related_name="equipos",
-        db_column='idResponsable'  # Usa el nombre de columna exacto
+        db_column='idResponsable'
     )
 
     class Meta:
@@ -71,13 +71,13 @@ class EquipoSede(models.Model):
         Equipo, 
         on_delete=models.CASCADE, 
         related_name="equipos_sede",
-        db_column='idEquipo'  # Usa el nombre de columna exacto
+        db_column='idEquipo'
     )
     idSede = models.ForeignKey(
         Sede, 
         on_delete=models.CASCADE, 
         related_name="equipos",
-        db_column='idSede'  # Usa el nombre de columna exacto
+        db_column='idSede'
     )
     ubicacion = models.CharField(max_length=50)
 
@@ -87,3 +87,28 @@ class EquipoSede(models.Model):
 
     def __str__(self):
         return f'{self.idEquipo.nombreEquipo} - {self.idSede.nombreSede}'
+
+
+
+## Nuevo Modelo: ActividadRealizada
+
+
+class ActividadRealizada(models.Model):
+    idActividadRealizada = models.AutoField(primary_key=True)
+    idEquipo = models.ForeignKey(
+        Equipo,
+        on_delete=models.CASCADE,
+        related_name="actividades_realizadas",
+        db_column='idEquipo'
+    )
+    fecha = models.DateField()
+    observacion = models.CharField(max_length=255)
+    tipoMantenimiento = models.CharField(max_length=255)
+    tecnico = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "actividadRealizada"
+        managed = False # ¡Esto es lo importante para tu caso!
+
+    def __str__(self):
+        return f'Actividad en {self.idEquipo.nombreEquipo} el {self.fecha}'
